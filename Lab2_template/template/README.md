@@ -66,7 +66,7 @@ return res.status(201).json(thread);
 ## Diagrama secuencial
 
 Agregue aquí el diagrama de P6. Debe incluir las interacciones entre navegador, servidor y MongoDB para `GET /`, `GET /data.json` y `POST /new`.
-
+```mermaid
 sequenceDiagram
     autonumber
     actor Browser as Browser
@@ -104,3 +104,4 @@ sequenceDiagram
         Server-->>Browser: 201 Created (JSON con nuevo thread)
         note over Browser: Inserta nuevo thread al inicio del DOM
     end
+```
