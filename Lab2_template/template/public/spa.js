@@ -1,0 +1,1 @@
+/** Lógica para manejar la aplicación SPAs */
