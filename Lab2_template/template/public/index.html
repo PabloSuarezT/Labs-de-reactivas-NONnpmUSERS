@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NONnpmUSERS - Hilos</title>
+  <link rel="stylesheet" href="/main.css">
+</head>
+<body>
+
+  <main class="container">
+    <h1>Hilos de Discusión</h1>
+    <!-- P5: Formulario para crear un nuevo thread -->
+     
+    <section class="form-section">
+      <h2>Crear Nuevo Hilo</h2>
+      <form id="thread-form">
+        <div class="form-group">
+          <label for="autor">Autor:</label>
+          <input type="text" id="autor" name="autor" placeholder="Tu nombre..." required>
+        </div>
+
+        <div class="form-group">
+          <label for="contenido">Contenido:</label>
+          <textarea id="contenido" name="contenido" rows="4" placeholder="¿Qué quieres compartir?..." required></textarea>
+        </div>
+
+        <button type="submit" id="btn-submit">Publicar Hilo</button>
+      </form>
+    </section>
+
+    <hr>
+
+    <!-- Contenedor donde se insertarán los threads dinámicamente -->
+    <section id="threads-container">
+      <p id="loading-text">Cargando hilos...</p>
+    </section>
+  </main>
+
+  <script src="/spa.js"></script>
+</body>
+</html>

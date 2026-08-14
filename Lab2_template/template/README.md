@@ -66,3 +66,41 @@ return res.status(201).json(thread);
 ## Diagrama secuencial
 
 Agregue aquí el diagrama de P6. Debe incluir las interacciones entre navegador, servidor y MongoDB para `GET /`, `GET /data.json` y `POST /new`.
+
+sequenceDiagram
+    autonumber
+    actor Browser as Browser
+    participant Server as Server (Express)
+    participant DB as MongoDB
+
+    %% --- FLUJO 1: CARGA DE PÁGINA INICIAL ---
+    rect rgb(240, 248, 255)
+        note over Browser, Server: 1. Carga inicial de la página
+        Browser->>Server: GET /
+        Server-->>Browser: Documento HTML (index.html)
+        Browser->>Server: GET /main.css
+        Server-->>Browser: Archivo CSS (main.css)
+        Browser->>Server: GET /spa.js
+        Server-->>Browser: Archivo JS (spa.js)
+    end
+
+    %% --- FLUJO 2: OBTENCIÓN DEL LISTADO (GET /data.json) ---
+    rect rgb(245, 255, 250)
+        note over Browser, DB: 2. Obtención de hilos via AJAX
+        Browser->>Server: GET /data.json (AJAX/XMLHttpRequest)
+        Server->>DB: Thread.find({})
+        DB-->>Server: Arreglo de documentos [threads]
+        Server-->>Browser: 200 OK (JSON con listado de threads)
+        note over Browser: Renderiza threads en el DOM sin recargar
+    end
+
+    %% --- FLUJO 3: CREACIÓN DE UN HILO (POST /new) ---
+    rect rgb(255, 245, 238)
+        note over Browser, DB: 3. Creación de hilo via AJAX
+        Browser->>Server: POST /new (JSON: autor, contenido)
+        Server->>DB: Thread.create({ autor, contenido })
+        note over DB: Asigna _id y timestamps (createAt)
+        DB-->>Server: Documento guardado
+        Server-->>Browser: 201 Created (JSON con nuevo thread)
+        note over Browser: Inserta nuevo thread al inicio del DOM
+    end
