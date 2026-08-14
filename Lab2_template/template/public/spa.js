@@ -44,7 +44,7 @@ function loadThreads() {
           container.innerHTML = ''; // Limpiar loader
 
           if (threads.length === 0) {
-            container.innerHTML = '<p>No hay hilos disponibles aún.</p>';
+            container.innerHTML = '<p id="empty-msg">No hay hilos disponibles aún.</p>';
             return;
           }
 
