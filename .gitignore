@@ -1,6 +1,6 @@
-node_modules/
-dist/
 *Zone.Identifier*
 .*.Zone.Identifier
 __MACOSX/
 .DS_Store
+node_modules/
+dist/
