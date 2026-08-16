@@ -9,6 +9,50 @@
 <body>
     <div class="app-container">
         <main class="main-content">
+            <!-- Formulario de creación (P5) -->
+            <section class="card-container">
+                <div class="card-header">
+                    <h2 class="card-title">Nuevo Thread</h2>
+                </div>
+                <div class="card-body">
+                    <form id="create-thread-form">
+                        <div id="form-feedback" class="feedback-msg hidden"></div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="author-input" class="form-label">Autor</label>
+                                <textarea 
+                                    id="author-input" 
+                                    name="autor" 
+                                    class="form-textarea"
+                                    rows="1" 
+                                    placeholder="Tu nombre" 
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="content-input" class="form-label">Contenido</label>
+                                <textarea 
+                                    id="content-input" 
+                                    name="contenido" 
+                                    class="form-textarea"
+                                    rows="2" 
+                                    placeholder="Escribe el contenido..." 
+                                    required
+                                ></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" id="submit-btn" class="btn-pill">
+                                <span>Publicar</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
             <!-- Listado de threads (P3) -->
             <section class="card-container">
                 <div class="card-header">

@@ -2,6 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     loadThreads();
+    setupFormHandler();
 });
 
 // P3: Cargar hilos mediante GET /data.json sin recargar la página
@@ -42,6 +43,94 @@ async function loadThreads() {
     }
 }
 
+// P5: Configurar envío del formulario vía AJAX a POST /new sin recargar la página
+function setupFormHandler() {
+    const form = document.getElementById('create-thread-form');
+    const authorInput = document.getElementById('author-input');
+    const contentInput = document.getElementById('content-input');
+
+    [authorInput, contentInput].forEach(element => {
+        if (element) {
+            element.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+        }
+    });
+
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = document.getElementById('submit-btn');
+
+        const autor = authorInput ? authorInput.value.trim() : '';
+        const contenido = contentInput ? contentInput.value.trim() : '';
+
+        if (!autor || !contenido) {
+            showFeedback('Por favor completa todos los campos.', 'error');
+            return;
+        }
+
+        try {
+            if (submitBtn) submitBtn.disabled = true;
+
+            const response = await fetch('/new', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ autor, contenido })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || 'Error al guardar el thread');
+            }
+
+            const newThread = await response.json();
+
+            // Agregar el nuevo thread al listado dinámicamente sin recargar la página
+            prependThread(newThread);
+
+            // Limpiar formulario y dar retroalimentación
+            if (authorInput) {
+                authorInput.value = '';
+                authorInput.style.height = 'auto';
+            }
+            if (contentInput) {
+                contentInput.value = '';
+                contentInput.style.height = 'auto';
+            }
+            showFeedback('¡Thread publicado exitosamente!', 'success');
+
+        } catch (error) {
+            console.error('Error al crear thread:', error);
+            showFeedback(error.message || 'No se pudo publicar el thread.', 'error');
+        } finally {
+            if (submitBtn) submitBtn.disabled = false;
+        }
+    });
+}
+
+// Agregar thread al inicio de la lista
+function prependThread(thread) {
+    const tbody = document.getElementById('threads-tbody');
+    const emptyState = document.getElementById('empty-state');
+    const table = document.getElementById('threads-table');
+
+    if (emptyState) emptyState.classList.add('hidden');
+    if (table) table.classList.remove('hidden');
+
+    if (tbody) {
+        const currentCount = tbody.children.length + 1;
+        const threadHTML = createThreadRowHTML(thread, currentCount);
+        tbody.insertAdjacentHTML('afterbegin', threadHTML);
+        updateRowNumbers();
+    }
+}
+
 function renderThreadsList(threads) {
     const tbody = document.getElementById('threads-tbody');
     if (!tbody) return;
@@ -68,6 +157,26 @@ function createThreadRowHTML(thread, rowNum) {
             <td class="date-col">${escapeHTML(dateFormatted)}</td>
         </tr>
     `;
+}
+
+function updateRowNumbers() {
+    const rows = document.querySelectorAll('#threads-tbody tr');
+    rows.forEach((row, index) => {
+        const numCell = row.querySelector('.row-num');
+        if (numCell) numCell.textContent = index + 1;
+    });
+}
+
+function showFeedback(message, type) {
+    const feedback = document.getElementById('form-feedback');
+    if (!feedback) return;
+
+    feedback.textContent = message;
+    feedback.className = `feedback-msg ${type}`;
+    
+    setTimeout(() => {
+        feedback.classList.add('hidden');
+    }, 3500);
 }
 
 function escapeHTML(str) {
