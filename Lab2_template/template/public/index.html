@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threads</title>
+    <link rel="stylesheet" href="/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <main class="main-content">
+            <!-- Listado de threads (P3) -->
+            <section class="card-container">
+                <div class="card-header">
+                    <h2 class="card-title">Listado de Threads</h2>
+                </div>
+                
+                <div id="loading-spinner" class="spinner-container">
+                    <div class="spinner"></div>
+                    <span>Cargando threads...</span>
+                </div>
+
+                <div id="empty-state" class="empty-state hidden">
+                    <p>No hay threads publicados aún.</p>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="threads-table" id="threads-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">#</th>
+                                <th style="width: 180px;">Autor</th>
+                                <th>Contenido</th>
+                                <th style="width: 180px;">Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody id="threads-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/spa.js"></script>
+</body>
+</html>
