@@ -1,6 +1,6 @@
 import { Router } from "express";
 import path from "path";
-import { getThreads } from "../controller/threadsController";
+import { getThreads, createThread } from "../controller/threadsController";
 
 const router = Router();
 
@@ -10,5 +10,6 @@ router.get("/", (req, res) => {
 });
 
 router.get("/data.json", getThreads);
+router.post("/new", createThread);
 
 export default router;
