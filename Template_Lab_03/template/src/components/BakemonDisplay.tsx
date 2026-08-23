@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import type { Bakemon } from '../types';
+import MovesList from './MovesList';
 
 export default function BakemonDisplay({ bakemon }: { bakemon: Bakemon }) {
   const totalStats = bakemon.stats.reduce((sum, s) => sum + s.base_value, 0);
+  const [showMoves, setShowMoves] = useState(false);
 
   return (
     <div className="bakemon-display-card">
@@ -52,6 +55,17 @@ export default function BakemonDisplay({ bakemon }: { bakemon: Bakemon }) {
           <strong>Total:</strong>
           <span className="total-stats-value">{totalStats}</span>
         </div>
+      </section>
+
+      <section className="bakemon-moves-section">
+        <button
+          className="expand-moves-button"
+          onClick={() => setShowMoves(prev => !prev)}
+        >
+          {showMoves ? 'Ocultar movimientos' : 'Expandir movimientos'}
+        </button>
+
+        {showMoves && <MovesList moveIds={bakemon.moves} />}
       </section>
     </div>
   );
