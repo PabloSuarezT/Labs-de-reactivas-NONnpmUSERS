@@ -47,7 +47,10 @@ export interface BakemonMove {
 
 export interface BakemonListProps {
   bakemons: Bakemon[];
+  team: Bakemon[];
   onSelectBakemon: (bakemon: Bakemon) => void;
+  onAddToTeam: (bakemon: Bakemon) => void;
+  onRemoveFromTeam: (bakemonId: number) => void;
 }
 
 export interface BakemonDisplayProps {
