@@ -44,3 +44,13 @@ export interface BakemonMove {
   ailment: string;
   effect_entry: string;
 }
+
+export interface BakemonListProps {
+  bakemons: Bakemon[];
+  onSelectBakemon: (bakemon: Bakemon) => void;
+}
+
+export interface BakemonDisplayProps {
+  bakemon: Bakemon;
+  onBack?: () => void;
+}

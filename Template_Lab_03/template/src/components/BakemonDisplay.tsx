@@ -1,20 +1,26 @@
 import { useState } from 'react';
-import type { Bakemon } from '../types';
+import type { BakemonDisplayProps } from '../types';
 import MovesList from './MovesList';
 
-export default function BakemonDisplay({ bakemon }: { bakemon: Bakemon }) {
+export default function BakemonDisplay({ bakemon, onBack }: BakemonDisplayProps) {
   const totalStats = bakemon.stats.reduce((sum, s) => sum + s.base_value, 0);
   const [showMoves, setShowMoves] = useState(false);
 
   return (
     <div className="bakemon-display-card">
+      {onBack && (
+        <button className="back-button" onClick={onBack} style={{ marginBottom: '15px' }}>
+          ← Volver a la lista
+        </button>
+      )}
+
       <header className="bakemon-header">
         <h2 className="bakemon-title">
           <span className="bakemon-number">#{String(bakemon.id).padStart(3, '0')}</span>
           <span className="bakemon-name">{bakemon.name}</span>
         </h2>
         <div className="bakemon-types">
-          {bakemon.types.map(t => ( /* //map para recorrer los tipos y almacenarlos  */
+          {bakemon.types.map(t => (
             <span key={t.slot} className={`type-badge type-${t.type}`}>{t.type}</span>
           ))}
         </div>
@@ -23,7 +29,7 @@ export default function BakemonDisplay({ bakemon }: { bakemon: Bakemon }) {
       <section className="bakemon-info-grid">
         <div className="info-box bakemon-physical">
           <h3>Dimensiones</h3>
-          <p><strong>Altura:</strong> {bakemon.height / 10} m</p> {/* //divisiones para que quede en las medidas respectivas */}
+          <p><strong>Altura:</strong> {bakemon.height / 10} m</p>
           <p><strong>Peso:</strong> {bakemon.weight / 10} kg</p>
         </div>
         <div className="info-box bakemon-abilities">
@@ -44,7 +50,7 @@ export default function BakemonDisplay({ bakemon }: { bakemon: Bakemon }) {
           {bakemon.stats.map(s => (
             <div key={s.name} className="stat-row">
               <span className="stat-name">{s.name}</span>
-              <div className="stat-bar-container"> {/* //barrita para visualizar */}
+              <div className="stat-bar-container">
                 <div className="stat-bar-fill" style={{ width: `${(s.base_value / 255) * 100}%` }} />
               </div>
               <span className="stat-value">{s.base_value}</span>
