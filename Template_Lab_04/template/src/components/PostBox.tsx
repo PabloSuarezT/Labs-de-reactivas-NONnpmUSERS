@@ -1,9 +1,29 @@
+import React, { useState } from 'react';
 // P1: componente que renderiza un thread o un comentario.
 //
 // Recibe por props el contenido y el autor. Si el autor viene vacío, muestra
 // "Anónimo". Si el comentario responde a otro, recibe además el id del
 // respondido y lo muestra; si no responde a nadie, no muestra nada.
-//
+import type { Post } from "../types/posts"
+
+
+interface ComentarioProps {
+    post: Post;
+};
+
+const Comentario = ({post}: ComentarioProps) => {    
+    return
+    <>
+    <div>
+        <li>Nota escrita por: {post.author ? post.author : "Anónimo"}</li>
+        <li>Contenido: {post.content}</li>
+        {parent ?<li>Respondiendo a: {post.parent}</li>:<></>}
+    </div>
+    </>;
+};
+
+export default Comentario;
+
 // P3: agregue aquí una estructura clickeable para entrar a la vista detallada
 // del thread.
 //
