@@ -1,0 +1,10 @@
+/* Lo mínimo para que la página se lea. Los estilos son la P6: los bordes de
+   los comentarios y el color de fondo según likes y dislikes van ahí, no
+   aquí. */
+
+body {
+  margin: 0;
+  padding: 1rem;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}

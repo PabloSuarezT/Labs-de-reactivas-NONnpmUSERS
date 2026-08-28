@@ -1,0 +1,81 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "content": "Bienvenidos a Pila Completa. Este es el primer thread.",
+      "author": "auxiliar",
+      "thread": null,
+      "parent": null,
+      "createdAt": "2025-09-01T14:00:00.000Z",
+      "updatedAt": "2025-09-01T14:00:00.000Z",
+      "likes": 12,
+      "dislikes": 1
+    },
+    {
+      "id": 2,
+      "content": "¿Alguien entendió para qué sirve useEffect?",
+      "author": null,
+      "thread": null,
+      "parent": null,
+      "createdAt": "2025-09-02T09:30:00.000Z",
+      "updatedAt": "2025-09-02T09:30:00.000Z",
+      "likes": 3,
+      "dislikes": 3
+    },
+    {
+      "id": 3,
+      "content": "Se cayó el servidor de nuevo.",
+      "author": "anon123",
+      "thread": null,
+      "parent": null,
+      "createdAt": "2025-09-03T20:15:00.000Z",
+      "updatedAt": "2025-09-03T20:15:00.000Z",
+      "likes": 0,
+      "dislikes": 7
+    },
+    {
+      "id": 4,
+      "content": "Sirve para ejecutar código después de que el componente se renderiza.",
+      "author": "carlos",
+      "thread": 2,
+      "parent": null,
+      "createdAt": "2025-09-02T10:00:00.000Z",
+      "updatedAt": "2025-09-02T10:00:00.000Z",
+      "likes": 5,
+      "dislikes": 0
+    },
+    {
+      "id": 5,
+      "content": "Y con el arreglo de dependencias vacío corre una sola vez.",
+      "author": null,
+      "thread": 2,
+      "parent": 4,
+      "createdAt": "2025-09-02T10:05:00.000Z",
+      "updatedAt": "2025-09-02T10:05:00.000Z",
+      "likes": 2,
+      "dislikes": 0
+    },
+    {
+      "id": 6,
+      "content": "Gracias, ahora sí me quedó claro.",
+      "author": "martin",
+      "thread": 2,
+      "parent": 5,
+      "createdAt": "2025-09-02T10:20:00.000Z",
+      "updatedAt": "2025-09-02T10:20:00.000Z",
+      "likes": 1,
+      "dislikes": 1
+    },
+    {
+      "id": 7,
+      "content": "Primero.",
+      "author": null,
+      "thread": 1,
+      "parent": null,
+      "createdAt": "2025-09-01T14:02:00.000Z",
+      "updatedAt": "2025-09-01T14:02:00.000Z",
+      "likes": 0,
+      "dislikes": 4
+    }
+  ]
+}
