@@ -12,14 +12,14 @@ interface ComentarioProps {
 };
 
 const Comentario = ({post}: ComentarioProps) => {    
-    return
+    return(
     <>
-    <div>
-        <li>Nota escrita por: {post.author ? post.author : "Anónimo"}</li>
-        <li>Contenido: {post.content}</li>
-        {parent ?<li>Respondiendo a: {post.parent}</li>:<></>}
-    </div>
-    </>;
+        <div>
+            <li>Nota escrita por: {post.author ? post.author : "Anónimo"}</li>
+            <li>Contenido: {post.content}</li>
+            {parent ? <li>Respondiendo a: {post.parent}</li> : <></>}
+        </div>
+    </>);
 };
 
 export default Comentario;

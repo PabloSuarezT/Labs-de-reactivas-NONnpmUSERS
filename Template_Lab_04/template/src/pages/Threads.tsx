@@ -4,12 +4,21 @@
 // el componente de P1. Recuerde que la llamada al servidor va dentro de un
 // `useEffect` y su resultado en el estado del componente.
 //
+
+import { useEffect, useState } from 'react'
+import type { Post } from '../types/posts'
+import threadsService from '../services/threads'
+
+const Threads = () => {
+    const [threads, setThreads] = useState<Post[]>([])
+
+    useEffect(() => {
+        threadsService.getAll().then((data) => {
+            setThreads(data)
+        })
+}, [])
+
+
 // P4: agregue el formulario al principio de la página. Aquí crea un thread.
-//
-// import { useEffect, useState } from 'react'
-// import type { Post } from '../types/posts'
-// import threadsService from '../services/threads'
-//
-// const Threads = () => { ... }
-//
+
 // export default Threads
