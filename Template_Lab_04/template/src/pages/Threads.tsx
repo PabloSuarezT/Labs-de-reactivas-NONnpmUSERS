@@ -7,6 +7,7 @@
 
 import { useEffect, useState } from 'react'
 import type { Post } from '../types/posts'
+import PostBox from '../components/PostBox'
 import threadsService from '../services/threads'
 
 const Threads = () => {
@@ -16,9 +17,23 @@ const Threads = () => {
         threadsService.getAll().then((data) => {
             setThreads(data)
         })
-}, [])
+    }, [])
+
+    return (
+        <>
+          <h1>Listado de Threads: </h1>
+          <ul>
+            {threads.map((thread) =>(
+                <li key = {thread.id}>
+                    <PostBox post={thread}/>
+                </li>
+            ))}
+          </ul> 
+        </>
+    )
+}
 
 
 // P4: agregue el formulario al principio de la página. Aquí crea un thread.
 
-// export default Threads
+export default Threads

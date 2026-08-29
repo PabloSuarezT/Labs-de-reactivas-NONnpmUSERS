@@ -11,37 +11,36 @@
 //
 // Cada función debe declarar el tipo de sus argumentos y el de su retorno.
 //
-import axios from 'axios'  
+import axios from 'axios'
 import type { Post } from '../types/posts'
 
 const baseUrl = 'https://fullstack.dcc.uchile.cl:3000/threads'
 
 // P2: obtener el listado de threads.
 //
-const getAll = axios.get(baseUrl).then((response) => {
-    const comentario = response.data
-    console.log(comentario)
-});
+
+const getAll = (): Promise<Post[]> => {
+  return axios.get<Post[]>(baseUrl).then((response) => response.data)
+}
 
 // P2: crear un thread. El servidor solo necesita el contenido y, si lo hay,
 // el autor; del resto de los campos se encarga él.
 //
 interface ThreadCreateData {
-    content: string
-    author?: string
+  content: string
+  author?: string
 }
 
-const create = (data: ThreadCreateData) => {
-    return axios.post<Post>(baseUrl, data).then((response) => {
-        response.data})
-};
+const create = (data: ThreadCreateData) : Promise<Post> => {
+  return axios.post<Post>(baseUrl, data).then((response) => response.data)
+}
 
 export default {
-    getAll,
-    create,
-};
+  getAll,
+  create,
+}
 
-    //return response.data
+//return response.data
 
 // P3: obtener un thread junto a sus comentarios.
 //

@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 // P1: componente que renderiza un thread o un comentario.
 //
 // Recibe por props el contenido y el autor. Si el autor viene vacío, muestra
@@ -11,18 +10,18 @@ interface ComentarioProps {
     post: Post;
 };
 
-const Comentario = ({post}: ComentarioProps) => {    
+const PostBox = ({post}: ComentarioProps) => {    
     return(
     <>
         <div>
             <li>Nota escrita por: {post.author ? post.author : "Anónimo"}</li>
             <li>Contenido: {post.content}</li>
-            {parent ? <li>Respondiendo a: {post.parent}</li> : <></>}
+            {post.parent ? <li>Respondiendo a: {post.parent}</li> : <></>}
         </div>
     </>);
 };
 
-export default Comentario;
+export default PostBox;
 
 // P3: agregue aquí una estructura clickeable para entrar a la vista detallada
 // del thread.
