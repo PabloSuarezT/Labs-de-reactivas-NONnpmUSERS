@@ -14,13 +14,13 @@
 import axios from 'axios'
 import type { Post } from '../types/posts'
 
-const baseUrl = 'https://fullstack.dcc.uchile.cl:3000/threads'
+const baseUrl = 'http://localhost:3001/threads'
 
 // P2: obtener el listado de threads.
 //
 
 const getAll = (): Promise<Post[]> => {
-  return axios.get<Post[]>(baseUrl).then((response) => response.data)
+  return axios.get<Post[]>(baseUrl).then(response => response.data)
 }
 
 // P2: crear un thread. El servidor solo necesita el contenido y, si lo hay,
@@ -31,34 +31,40 @@ interface ThreadCreateData {
   author?: string
 }
 
-const create = (data: ThreadCreateData) : Promise<Post> => {
-  return axios.post<Post>(baseUrl, data).then((response) => response.data)
+const create = (data: ThreadCreateData): Promise<Post> => {
+  return axios.post<Post>(baseUrl, data).then(response => response.data)
+}
+
+// P3: obtener un thread junto a sus comentarios.
+
+interface ThreadAnswer {
+  thread: Post
+  comments: Post[]
+}
+
+const getThread = (id: string): Promise<ThreadAnswer> => {
+  return axios.get<ThreadAnswer>(`${baseUrl}/${id}`).then(response => response.data)
+}
+
+// P3: crear un comentario dentro de un thread. `parent` es el id del
+// comentario al que responde, y debe pertenecer al mismo thread.
+
+interface CommentCreateData {
+  content: string
+  author?: string
+  parent?: number
+}
+
+const createComment = (data: CommentCreateData, threadId: number): Promise<Post> => {
+  return axios.post<Post>(`${baseUrl}/${threadId}`, data).then(response => response.data)
 }
 
 export default {
   getAll,
   create,
+  getThread,
+  createComment,
 }
-
-//return response.data
-
-// P3: obtener un thread junto a sus comentarios.
-//
-// interface ThreadAnswer {
-//   thread: Post
-//   comments: Post[]
-// }
-// const getThread = (id: string) => { ... }
-
-// P3: crear un comentario dentro de un thread. `parent` es el id del
-// comentario al que responde, y debe pertenecer al mismo thread.
-//
-// interface CommentCreateData {
-//   content: string
-//   author?: string
-//   parent?: number
-// }
-// const createComment = (data: CommentCreateData, threadId: number) => { ... }
 
 // P5: actualizar un thread o comentario. Ojo con la ruta: es /posts/:id, no
 // /threads/:id. El endpoint sobrescribe el objeto, así que hay que mandar una
