@@ -32,7 +32,7 @@ const PostBox = ({ post }: ComentarioProps) => {
 
 export default PostBox;
 
-// P5: muestre la cantidad de likes y dislikes, con un botón para cada uno. El
+// P6: muestre la cantidad de likes y dislikes, con un botón para cada uno. El
 // número debe cambiar sin recargar la página, así que conviene guardarlo en el
 // estado del componente además de mandarlo al servidor.
 //

@@ -66,7 +66,7 @@ export default {
   createComment,
 }
 
-// P5: actualizar un thread o comentario. Ojo con la ruta: es /posts/:id, no
+// P6: actualizar un thread o comentario. Ojo con la ruta: es /posts/:id, no
 // /threads/:id. El endpoint sobrescribe el objeto, así que hay que mandar una
 // copia completa con el campo ya modificado.
 //

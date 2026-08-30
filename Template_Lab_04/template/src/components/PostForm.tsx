@@ -1,4 +1,4 @@
-// P4: formulario para publicar.
+// P5: formulario para publicar.
 //
 // Pide contenido y, de forma opcional, un autor. Quien lo usa decide qué hacer
 // al enviarlo: en la página principal crea un thread, y en la vista detallada
