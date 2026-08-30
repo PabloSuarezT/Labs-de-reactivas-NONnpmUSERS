@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Threads from './pages/Threads'
 import Thread from './pages/Thread'
+//import newCommentForm from './components/PostForm'   -> Para poder importar después el formulario para la P5
 
 function App() {
   // P2: reemplace este contenido por la página principal, con el listado de

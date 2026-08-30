@@ -14,5 +14,15 @@
 // }
 //
 // const PostForm = ({ ... }: PostFormProps) => { ... }
+
+const newCommentForm = () => {
+    return (
+    <form>
+      <input placeholder="Autor" />
+      <strong><input placeholder="Comentario" /></strong>
+      <button type="submit">Publicar Comentario</button>
+    </form>
+    )
+}
 //
-// export default PostForm
+export default newCommentForm

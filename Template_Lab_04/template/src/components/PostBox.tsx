@@ -4,31 +4,33 @@
 // "Anónimo". Si el comentario responde a otro, recibe además el id del
 // respondido y lo muestra; si no responde a nadie, no muestra nada.
 import type { Post } from '../types/posts'
-import { Link } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 interface ComentarioProps {
   post: Post
 };
 
 const PostBox = ({ post }: ComentarioProps) => {
-  const content = (
+  const navigate = useNavigate()
+  const { id } = useParams()
+  const isThread = post.thread === null
+  const isCurrentThread = isThread && id === String(post.id)
+
+  return (
     <div>
       <p>
         Nota escrita por: {post.author ? post.author : 'Anónimo'}
       </p>
       <p>Contenido: {post.content}</p>
       {post.parent ? <p>Respondiendo a: {post.parent}</p> : null}
+      {isThread && !isCurrentThread ? (
+        <button type="button" onClick={() => navigate(`/${post.id}`)}>
+          Ver Detalle →
+        </button>
+      ) : null}
     </div>
-  );
-    // P3: agregue aquí una estructura clickeable para entrar a la vista detallada
-    // del thread.
-  if (post.thread === null) {
-    // Es un thread (no un comentario): lo hacemos clickeable.
-    return <Link to={`/${post.id}`}>{content}</Link>;
-  }
-
-  return content;
-};
+  )
+ };
 
 export default PostBox;
 

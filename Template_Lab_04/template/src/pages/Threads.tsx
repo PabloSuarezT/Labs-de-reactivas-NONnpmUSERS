@@ -36,4 +36,5 @@ const Threads = () => {
 
 // P5: agregue el formulario al principio de la página. Aquí crea un thread.
 
+
 export default Threads
