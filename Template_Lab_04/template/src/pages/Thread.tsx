@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import type { Post } from '../types/posts'
 import PostBox from '../components/PostBox'
+import PostForm from '../components/PostForm'
 import threadsService from '../services/threads'
 
 const Thread = () => {
@@ -20,6 +21,14 @@ const Thread = () => {
     })
   }, [id])
 
+  const handleCreateComment = (data: { content: string, author?: string, parent?: number }) => {
+    if (!id) return
+
+    threadsService.createComment(data, Number(id)).then((newComment) => {
+      setComments(prevComments => [...prevComments, newComment])
+    })
+  }
+
   if (!thread) {
     return <p>Cargando...</p>
   }
@@ -27,11 +36,13 @@ const Thread = () => {
   return (
     <>
       <PostBox post={thread} />
+      <h2>Crear un nuevo comentario</h2>
+      <PostForm buttonText="Crear Comentario" onSubmit={handleCreateComment} />
       <h2>Comentarios</h2>
       <ul>
         {comments.map(comment => (
           <li key={comment.id}>
-            <PostBox post={comment} />
+            <PostBox post={comment} onReply={data => handleCreateComment({ ...data, parent: comment.id })} />
           </li>
         ))}
       </ul>

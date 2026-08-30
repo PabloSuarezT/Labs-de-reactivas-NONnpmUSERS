@@ -8,33 +8,40 @@
 import { useEffect, useState } from 'react'
 import type { Post } from '../types/posts'
 import PostBox from '../components/PostBox'
+import PostForm from '../components/PostForm'
 import threadsService from '../services/threads'
 
 const Threads = () => {
-    const [threads, setThreads] = useState<Post[]>([])
+  const [threads, setThreads] = useState<Post[]>([])
 
-    useEffect(() => {
-        threadsService.getAll().then((data) => {
-            setThreads(data)
-        })
-    }, [])
+  useEffect(() => {
+    threadsService.getAll().then((data) => {
+      setThreads(data)
+    })
+  }, [])
 
-    return (
-        <>
-          <h1>Listado de Threads: </h1>
-          <ul>
-            {threads.map((thread) =>(
-                <li key = {thread.id}>
-                    <PostBox post={thread}/>
-                </li>
-            ))}
-          </ul> 
-        </>
-    )
+  const handleCreateThread = (data: { content: string, author?: string }) => {
+    threadsService.create(data).then((newThread) => {
+      setThreads(prevThreads => [...prevThreads, newThread])
+    })
+  }
+
+  return (
+    <>
+      <h2>Crear un nuevo Thread</h2>
+      <PostForm buttonText="Crear Thread" onSubmit={handleCreateThread} />
+      <h1>Listado de Threads:</h1>
+      <ul>
+        {threads.map(thread => (
+          <li key={thread.id}>
+            <PostBox post={thread} />
+          </li>
+        ))}
+      </ul>
+    </>
+  )
 }
 
-
 // P5: agregue el formulario al principio de la página. Aquí crea un thread.
-
 
 export default Threads
