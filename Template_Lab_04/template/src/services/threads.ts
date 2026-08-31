@@ -10,6 +10,8 @@ let mockPosts: Post[] = [
     dislikes: 0,
     thread: null,
     parent: null,
+    createdAt: new Date().toDateString(), // agregados ahora para cumplir con parámetros
+    updatedAt: new Date().toDateString(), // de la interfaz 'Post'.
   },
 ]
 
@@ -31,6 +33,8 @@ const create = (data: ThreadCreateData): Promise<Post> => {
     dislikes: 0,
     thread: null,
     parent: null,
+    createdAt: new Date().toDateString(), // Nuevamente, agregado para cumplir con
+    updatedAt: new Date().toDateString(), // los parámetros de 'Post'.
   }
   mockPosts.push(newPost)
   return Promise.resolve(newPost)
@@ -68,6 +72,8 @@ const createComment = (data: CommentCreateData, threadId: number): Promise<Post>
     dislikes: 0,
     thread: threadId,
     parent: data.parent || null,
+    createdAt: new Date().toDateString(), // Finalmente y una vez más, agregado para 
+    updatedAt: new Date().toDateString(), // cumplir con los parámetros de 'Post'.
   }
   mockPosts.push(newComment)
   return Promise.resolve(newComment)
@@ -85,3 +91,16 @@ export default {
   createComment,
   update,
 }
+
+// Se llama a este archivo desde PostBox como 'ThreadsService'. Esto funciona
+// internamente como si se tuviera:
+
+// const threadsService = {
+//   getAll,
+//   create,
+//   getThread,
+//   createComment,
+//   update
+// }
+
+// al momento de hacer 'export default'. Se puede llamar utilizando cualquier nombre.
