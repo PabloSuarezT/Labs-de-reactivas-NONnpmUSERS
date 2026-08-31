@@ -1,62 +1,81 @@
-// P2, P3 y P5: módulo para comunicarse con el servidor.
-//
-// El servidor de datos corre en http://localhost:3001 (`npm run server`) y
-// expone estos endpoints:
-//
-//   GET  /threads      -> Post[]                      listado de threads
-//   POST /threads      -> Post                         crea un thread
-//   GET  /threads/:id  -> { thread, comments }         un thread y sus comentarios
-//   POST /threads/:id  -> Post                         crea un comentario en el thread
-//   PUT  /posts/:id    -> Post                         sobrescribe un thread o comentario
-//
-// Cada función debe declarar el tipo de sus argumentos y el de su retorno.
-//
-import axios from 'axios'
 import type { Post } from '../types/posts'
 
-const baseUrl = 'http://localhost:3001/threads'
-
-// P2: obtener el listado de threads.
-//
+// Estado inicial simulado
+let mockPosts: Post[] = [
+  {
+    id: 1,
+    content: '¡Bienvenidos al laboratorio de React!',
+    author: 'Profesor',
+    likes: 5,
+    dislikes: 0,
+    thread: null,
+    parent: null,
+  },
+]
 
 const getAll = (): Promise<Post[]> => {
-  return axios.get<Post[]>(baseUrl).then(response => response.data)
+  return Promise.resolve([...mockPosts.filter((p) => p.thread === null)])
 }
 
-// P2: crear un thread. El servidor solo necesita el contenido y, si lo hay,
-// el autor; del resto de los campos se encarga él.
-//
-interface ThreadCreateData {
+export interface ThreadCreateData {
   content: string
   author?: string
 }
 
 const create = (data: ThreadCreateData): Promise<Post> => {
-  return axios.post<Post>(baseUrl, data).then(response => response.data)
+  const newPost: Post = {
+    id: Date.now(),
+    content: data.content,
+    author: data.author || 'Anónimo',
+    likes: 0,
+    dislikes: 0,
+    thread: null,
+    parent: null,
+  }
+  mockPosts.push(newPost)
+  return Promise.resolve(newPost)
 }
 
-// P3: obtener un thread junto a sus comentarios.
-
-interface ThreadAnswer {
+export interface ThreadAnswer {
   thread: Post
   comments: Post[]
 }
 
 const getThread = (id: string): Promise<ThreadAnswer> => {
-  return axios.get<ThreadAnswer>(`${baseUrl}/${id}`).then(response => response.data)
+  const threadId = Number(id)
+  const thread = mockPosts.find((p) => p.id === threadId)
+  const comments = mockPosts.filter((p) => p.thread === threadId || p.parent === threadId)
+
+  if (!thread) {
+    return Promise.reject(new Error('Thread no encontrado'))
+  }
+
+  return Promise.resolve({ thread, comments })
 }
 
-// P3: crear un comentario dentro de un thread. `parent` es el id del
-// comentario al que responde, y debe pertenecer al mismo thread.
-
-interface CommentCreateData {
+export interface CommentCreateData {
   content: string
   author?: string
   parent?: number
 }
 
 const createComment = (data: CommentCreateData, threadId: number): Promise<Post> => {
-  return axios.post<Post>(`${baseUrl}/${threadId}`, data).then(response => response.data)
+  const newComment: Post = {
+    id: Date.now(),
+    content: data.content,
+    author: data.author || 'Anónimo',
+    likes: 0,
+    dislikes: 0,
+    thread: threadId,
+    parent: data.parent || null,
+  }
+  mockPosts.push(newComment)
+  return Promise.resolve(newComment)
+}
+
+const update = (id: number, updatedPost: Post): Promise<Post> => {
+  mockPosts = mockPosts.map((p) => (p.id === id ? updatedPost : p))
+  return Promise.resolve(updatedPost)
 }
 
 export default {
@@ -64,18 +83,5 @@ export default {
   create,
   getThread,
   createComment,
+  update,
 }
-
-// P6: actualizar un thread o comentario. Ojo con la ruta: es /posts/:id, no
-// /threads/:id. El endpoint sobrescribe el objeto, así que hay que mandar una
-// copia completa con el campo ya modificado.
-//
-// const update = (id: number, newObject: Post) => { ... }
-
-// export default {
-//   getAll,
-//   create,
-//   getThread,
-//   createComment,
-//   update,
-// }

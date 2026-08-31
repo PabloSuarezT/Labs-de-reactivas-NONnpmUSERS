@@ -1,17 +1,13 @@
-// P1: componente que renderiza un thread o un comentario.
-//
-// Recibe por props el contenido y el autor. Si el autor viene vacío, muestra
-// "Anónimo". Si el comentario responde a otro, recibe además el id del
-// respondido y lo muestra; si no responde a nadie, no muestra nada.
-import type { Post } from '../types/posts'
-import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import type { Post } from '../types/posts'
 import PostForm from './PostForm'
+import threadsService from '../services/threads' // Importar el servicio
 
 interface ComentarioProps {
   post: Post
-  onReply?: (data: { content: string, author?: string, parent?: number }) => void
-};
+  onReply?: (data: { content: string; author?: string; parent?: number }) => void
+}
 
 const PostBox = ({ post, onReply }: ComentarioProps) => {
   const navigate = useNavigate()
@@ -20,23 +16,41 @@ const PostBox = ({ post, onReply }: ComentarioProps) => {
   const isCurrentThread = isThread && id === String(post.id)
   const [showReplyForm, setShowReplyForm] = useState(false)
 
+  // P6: Estado local reactivo para likes y dislikes
+  const [likes, setLikes] = useState(post.likes)
+  const [dislikes, setDislikes] = useState(post.dislikes)
+
+  // P6: Handlers para enviar el PUT al servidor y actualizar el estado
+  const handleLike = () => {
+    const updatedPost = { ...post, likes: likes + 1, dislikes }
+    threadsService.update(post.id, updatedPost).then(saved => {
+      setLikes(saved.likes)
+    })
+  }
+
+  const handleDislike = () => {
+    const updatedPost = { ...post, likes, dislikes: dislikes + 1 }
+    threadsService.update(post.id, updatedPost).then(saved => {
+      setDislikes(saved.dislikes)
+    })
+  }
+
   return (
-    <div>
-      <p>
-        Nota escrita por:
-        {' '}
-        {post.author || 'Anónimo'}
-      </p>
-      <p>
-        Contenido:
-        {post.content}
-      </p>
-      {post.parent && (
-        <p>
-          Respondiendo a:
-          {post.parent}
-        </p>
-      )}
+    <div style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
+      <p><strong>Nota escrita por:</strong> {post.author || 'Anónimo'}</p>
+      <p><strong>Contenido:</strong> {post.content}</p>
+      {post.parent && <p><em>Respondiendo a: #{post.parent}</em></p>}
+
+      {/* P6: Botones de Like / Dislike */}
+      <div style={{ display: 'flex', gap: '10px', margin: '10px 0' }}>
+        <button type="button" onClick={handleLike}>
+          👍 {likes}
+        </button>
+        <button type="button" onClick={handleDislike}>
+          👎 {dislikes}
+        </button>
+      </div>
+
       {isThread && !isCurrentThread && (
         <button type="button" onClick={() => navigate(`/${post.id}`)}>
           Ver Detalle →
@@ -44,37 +58,23 @@ const PostBox = ({ post, onReply }: ComentarioProps) => {
       )}
 
       {onReply && (
-        <>
+        <div style={{ marginTop: '10px' }}>
           <button type="button" onClick={() => setShowReplyForm(!showReplyForm)}>
             {showReplyForm ? 'Cancelar' : 'Responder'}
           </button>
           {showReplyForm && (
             <PostForm
-              buttonText="Responder"
+              buttonText="Enviar Respuesta"
               onSubmit={(data) => {
                 onReply(data)
                 setShowReplyForm(false)
               }}
             />
           )}
-        </>
+        </div>
       )}
     </div>
   )
 }
 
 export default PostBox
-
-// P6: muestre la cantidad de likes y dislikes, con un botón para cada uno. El
-// número debe cambiar sin recargar la página, así que conviene guardarlo en el
-// estado del componente además de mandarlo al servidor.
-//
-// import type { Post } from '../types/posts'
-//
-// interface PostBoxProps {
-//   ...
-// }
-//
-// const PostBox = ({ ... }: PostBoxProps) => { ... }
-//
-// export default PostBox
