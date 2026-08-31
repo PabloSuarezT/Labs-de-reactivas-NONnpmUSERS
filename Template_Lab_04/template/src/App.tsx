@@ -15,7 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/threads" replace />} />
         <Route path="/threads" element={<Threads />} />
-        <Route path="/:id" element={<Thread />} />
+        <Route path="/threads/:id" element={<Thread />} />
       </Routes>
     </BrowserRouter>
 
