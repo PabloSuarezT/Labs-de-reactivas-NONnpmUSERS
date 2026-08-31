@@ -1,7 +1,6 @@
 import type { Post } from '../types/posts'
 import axios from 'axios'
 const baseUrl = 'http://localhost:3001'
-// import { threadData } from '../mock-server/db.json'
 
 // Estado inicial simulado
 // let mockPosts: Post[] = [
@@ -17,8 +16,6 @@ const baseUrl = 'http://localhost:3001'
 //     updatedAt: new Date().toDateString(), // de la interfaz 'Post'.
 //   },
 // ]
-
-
 
 // const getAll = (): Promise<Post[]> => {
 //   return Promise.resolve([...mockPosts.filter((p) => p.thread === null)])

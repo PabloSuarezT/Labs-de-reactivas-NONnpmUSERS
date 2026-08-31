@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Threads from './pages/Threads'
 import Thread from './pages/Thread'
 //import newCommentForm from './components/PostForm'   -> Para poder importar después el formulario para la P5
@@ -13,7 +13,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Threads />} />
+        <Route path="/" element={<Navigate to="/threads" replace />} />
+        <Route path="/threads" element={<Threads />} />
         <Route path="/:id" element={<Thread />} />
       </Routes>
     </BrowserRouter>
