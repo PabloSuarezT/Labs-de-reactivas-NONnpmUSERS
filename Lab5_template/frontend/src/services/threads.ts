@@ -1,7 +1,9 @@
 import axios from 'axios'
 import type { Post } from '../types/posts'
 
-const baseUrl = `/threads`
+/////////////// P2 ///////////////
+// Se reemplaza la conexión anterior ('/threads') por el endpoint del backend ('/api/threads')
+const baseUrl = `/api/threads`
 
 const getAll = () => {
   const request = axios.get<Post[]>(`${baseUrl}/`)
