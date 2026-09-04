@@ -52,7 +52,7 @@ const PostBox = ({ post, onReply }: ComentarioProps) => {
       </div>
 
       {isThread && !isCurrentThread && (
-        <button type="button" onClick={() => navigate(`/${post.id}`)}>
+        <button type="button" onClick={() => navigate(`/threads/${post.id}`)}>
           Ver Detalle →
         </button>
       )}
