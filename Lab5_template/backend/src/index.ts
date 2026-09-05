@@ -2,7 +2,11 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import express from "express";
+import express, {
+  type NextFunction,
+  type Request,
+  type Response,
+} from "express";
 import cors from "cors";
 import { Post } from "./models/post.ts";
 
@@ -93,6 +97,43 @@ app.post("/api/threads/:id", (request, response, next) => {
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////// (Fin P3) 
+
+
+/////////////// P4 ///////////////
+
+// Middleware de manejo de errores
+const errorHandler = (
+  error: { name: string; message: string },
+  _request: Request,
+  response: Response,
+  next: NextFunction,
+) => {
+  console.error("Error capturado:", error.message);
+
+  if (error.name === "ValidationError") {
+    // Errores de validación de Mongoose (content vacío, author prohibido, largo excedido, etc.)
+    return response.status(400).json({ error: error.message });
+  }
+
+  if (error.name === "CastError") {
+    // Errores de formato de ID malformado (ej: un ObjectId inválido)
+    return response.status(400).json({ error: "id con formato incorrecto" });
+  }
+
+  // Si no es un error conocido, pasar al handler por defecto de Express
+  next(error);
+};
+
+app.use(errorHandler);
+
+// Middleware para endpoints desconocidos
+const unknownEndpoint = (_request: Request, response: Response) => {
+  response.status(404).json({ error: "endpoint desconocido" });
+};
+
+app.use(unknownEndpoint);
+
+////////////////////////////////////////////////////////////////////////////////////////////////// (Fin P4) 
 
 
 
