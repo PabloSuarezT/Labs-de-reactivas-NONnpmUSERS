@@ -38,7 +38,7 @@ const createComment = (data: CommentCreateData, threadId: number) => {
 
 const update = (id: number, newObject: Post) => {
   return axios
-    .put<Post>(`/posts/${id}`, newObject)
+    .put<Post>(`/api/posts/${id}`, newObject) // Corregido para que apunye a /api y funcione la p5
     .then(request => request.data)
 }
 

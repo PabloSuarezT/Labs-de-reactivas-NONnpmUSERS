@@ -135,7 +135,39 @@ app.use(unknownEndpoint);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////// (Fin P4) 
 
+/////////////// P5 ///////////////
 
+// PUT /api/posts/:id: Actualizar una publicación (thread o comentario)
+app.put("/api/posts/:id", (request, response, next) => {
+  const postId = Number(request.params.id);
+  const body = request.body;
+
+  // Sobrescribimos el objeto con los datos entregados en el body (Nota del enunciado)
+  const updatedPostData = {
+    content: body.content,
+    author: body.author,
+    thread: body.thread,
+    parent: body.parent,
+    likes: body.likes,
+    dislikes: body.dislikes,
+  };
+
+  // Buscamos por el campo `id` numérico y aplicamos la actualización
+  Post.findOneAndUpdate({ id: postId }, updatedPostData, {
+    new: true,           // Devuelve el objeto ya actualizado
+    runValidators: true, // Aplica las validaciones de la P1 durante la actualización
+  })
+    .then((updatedPost) => {
+      if (updatedPost) {
+        response.json(updatedPost);
+      } else {
+        response.status(404).json({ error: "publicación no encontrada" });
+      }
+    })
+    .catch((error) => next(error)); // Transfiere errores de validación a P4
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////// (Fin P5)
 
 app.listen(PORT, () => {
   console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
