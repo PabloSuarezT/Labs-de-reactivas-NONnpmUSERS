@@ -23,7 +23,7 @@ function App() {
           {toast?.message}
         </Alert>
       </Snackbar>
-      <BrowserRouter basename="/threads">
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Threads setToast={setToast} />} />
           <Route path="/:id" element={<Thread setToast={setToast} />} />

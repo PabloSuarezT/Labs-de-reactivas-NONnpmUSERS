@@ -16,6 +16,7 @@ const PORT = Number(process.env.PORT) || 3001;
 // Middlewares
 app.use(cors());
 app.use(express.json());
+app.use(express.static("dist")); // P6: Servir frontend compilado
 
 // GET /api/threads: Obtener todos los threads (thread === null)
 app.get("/api/threads", (_request, response) => {
@@ -99,42 +100,6 @@ app.post("/api/threads/:id", (request, response, next) => {
 ////////////////////////////////////////////////////////////////////////////////////////////////// (Fin P3) 
 
 
-/////////////// P4 ///////////////
-
-// Middleware de manejo de errores
-const errorHandler = (
-  error: { name: string; message: string },
-  _request: Request,
-  response: Response,
-  next: NextFunction,
-) => {
-  console.error("Error capturado:", error.message);
-
-  if (error.name === "ValidationError") {
-    // Errores de validación de Mongoose (content vacío, author prohibido, largo excedido, etc.)
-    return response.status(400).json({ error: error.message });
-  }
-
-  if (error.name === "CastError") {
-    // Errores de formato de ID malformado (ej: un ObjectId inválido)
-    return response.status(400).json({ error: "id con formato incorrecto" });
-  }
-
-  // Si no es un error conocido, pasar al handler por defecto de Express
-  next(error);
-};
-
-app.use(errorHandler);
-
-// Middleware para endpoints desconocidos
-const unknownEndpoint = (_request: Request, response: Response) => {
-  response.status(404).json({ error: "endpoint desconocido" });
-};
-
-app.use(unknownEndpoint);
-
-////////////////////////////////////////////////////////////////////////////////////////////////// (Fin P4) 
-
 /////////////// P5 ///////////////
 
 // PUT /api/posts/:id: Actualizar una publicación (thread o comentario)
@@ -168,6 +133,43 @@ app.put("/api/posts/:id", (request, response, next) => {
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////// (Fin P5)
+
+
+/////////////// P4 ///////////////
+
+// Middleware para endpoints desconocidos (debe ir después de todas las rutas y estáticos)
+const unknownEndpoint = (_request: Request, response: Response) => {
+  response.status(404).json({ error: "endpoint desconocido" });
+};
+
+app.use(unknownEndpoint);
+
+// Middleware de manejo de errores (debe ir al final de todos los middlewares)
+const errorHandler = (
+  error: { name: string; message: string },
+  _request: Request,
+  response: Response,
+  next: NextFunction,
+) => {
+  console.error("Error capturado:", error.message);
+
+  if (error.name === "ValidationError") {
+    // Errores de validación de Mongoose (content vacío, author prohibido, largo excedido, etc.)
+    return response.status(400).json({ error: error.message });
+  }
+
+  if (error.name === "CastError") {
+    // Errores de formato de ID malformado (ej: un ObjectId inválido)
+    return response.status(400).json({ error: "id con formato incorrecto" });
+  }
+
+  // Si no es un error conocido, pasar al handler por defecto de Express
+  next(error);
+};
+
+app.use(errorHandler);
+
+////////////////////////////////////////////////////////////////////////////////////////////////// (Fin P4)
 
 app.listen(PORT, () => {
   console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
