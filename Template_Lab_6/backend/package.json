@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "MONGODB_DBNAME=lab6-test tsx --test --test-concurrency=1 test/**/*.test.ts",
+    "test": "cross-env MONGODB_DBNAME=lab6-test tsx --test --test-concurrency=1 test/**/*.test.ts",
     "start": "node out/index.js",
     "dev": "ts-node src/index.ts",
     "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend"
@@ -19,6 +19,7 @@
     "@types/mongoose": "^5.11.96",
     "@types/node": "^24.6.0",
     "@types/supertest": "^6.0.3",
+    "cross-env": "^10.1.0",
     "supertest": "^7.1.4",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
