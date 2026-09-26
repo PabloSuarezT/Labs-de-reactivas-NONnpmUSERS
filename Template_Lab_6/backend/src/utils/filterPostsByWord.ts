@@ -1,3 +1,5 @@
+// --------------- P1 ---------------
+
 import { Post } from "../models/posts";
 
 const escapeRegExp = (s: string): string =>
@@ -11,3 +13,5 @@ export function filterPostsByWord(posts: Post[], query: string): Post[] {
   const pattern = new RegExp(`\\b${escapeRegExp(query)}\\b`, "i");
   return posts.filter((post) => pattern.test(post.content));
 }
+
+// --------------- P1 (fin) ---------------

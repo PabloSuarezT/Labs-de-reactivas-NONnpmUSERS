@@ -1,3 +1,5 @@
+// --------------- P2 ---------------
+
 import { test, describe, beforeEach, before, after } from "node:test"; 
 import assert from "node:assert";
 import supertest from "supertest";
@@ -93,3 +95,5 @@ describe("Pruebas de Integración", () => {
     await mongoose.connection.close();
   });
 });
+
+// --------------- P2 (fin) ---------------

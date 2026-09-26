@@ -1,3 +1,5 @@
+// --------------- P1 ---------------
+
 import { test, describe } from "node:test";
 import assert from "node:assert";
 import { filterPostsByWord } from "../../src/utils/filterPostsByWord";
@@ -49,3 +51,5 @@ describe("filterPostsByWord", () => {
     });
   });
 });
+
+// --------------- P1 (fin) --------------
