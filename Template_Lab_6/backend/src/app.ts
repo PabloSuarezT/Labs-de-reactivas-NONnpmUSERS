@@ -95,6 +95,16 @@ app.put("/api/posts/:id", (request, response, next) => {
     .catch((error) => next(error));
 });
 
+app.use(express.static("dist"));
+
+// --------------- P3 ---------------
+const unknownEndpoint = (request: Request, response: Response) => {
+  response.status(404).json({ error: "unknown endpoint" });
+};
+
+app.use(unknownEndpoint);
+// --------------- P3 (fin) ---------------
+
 const errorHandler = (
   error: { name: string; message: string },
   request: Request,
@@ -113,6 +123,5 @@ const errorHandler = (
 };
 
 app.use(errorHandler);
-app.use(express.static("dist"));
 
 export default app;

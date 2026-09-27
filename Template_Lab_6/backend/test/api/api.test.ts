@@ -89,11 +89,53 @@ describe("Pruebas de Integración", () => {
     assert.strictEqual(response.body.thread.id, thread1Id);
     assert.strictEqual(response.body.comments.length, 2);
   });
+  // --------------- P2 (fin) ---------------
 
-  // 2. Cerrar la conexión al finalizar todos los tests
+  // --------------- P3 ---------------
+
+  test("el identificador único de cada thread y comentario es id y no _id, y no trae __v", async () => {
+    const response = await api
+      .get(`/api/threads/${thread1Id}`)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    assert.ok(response.body.thread.id);
+    assert.strictEqual(response.body.thread._id, undefined);
+    assert.strictEqual(response.body.thread.__v, undefined);
+
+    assert.ok(response.body.comments.length > 0);
+    for (const comment of response.body.comments) {
+      assert.ok(comment.id);
+      assert.strictEqual(comment._id, undefined);
+      assert.strictEqual(comment.__v, undefined);
+    }
+  });
+
+  test("GET /api/threads/:id con un id válido pero que no existe responde 404", async () => {
+    const nonExistentId = new mongoose.Types.ObjectId().toString();
+    await api
+      .get(`/api/threads/${nonExistentId}`)
+      .expect(404);
+  });
+
+  test("GET /api/threads/:id con un id mal formado responde 400", async () => {
+    await api
+      .get("/api/threads/id-mal-formado")
+      .expect(400);
+  });
+
+  test("una petición a una ruta que no existe responde 404 y un cuerpo JSON con el error", async () => {
+    const response = await api
+      .get("/api/ruta-que-no-existe")
+      .expect(404)
+      .expect("Content-Type", /application\/json/);
+
+    assert.ok(response.body.error);
+  });
+  // --------------- P3 (fin) ---------------
+
+  // Cerrar la conexión al finalizar todos los tests
   after(async () => {
     await mongoose.connection.close();
   });
 });
-
-// --------------- P2 (fin) ---------------
