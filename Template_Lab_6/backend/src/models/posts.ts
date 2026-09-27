@@ -26,7 +26,7 @@ export interface Post {
 
 const BANNED = ["Huevito Rey", "Matías Toro", "Memes es mal ramo"];
 function isNotBanned(v: string) {
-  return !BANNED.includes(v.toLowerCase());
+  return !BANNED.map((b) => b.toLowerCase()).includes(v.toLowerCase());
 }
 
 const postSchema = new mongoose.Schema<Post>({

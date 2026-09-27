@@ -134,6 +134,82 @@ describe("Pruebas de Integración", () => {
   });
   // --------------- P3 (fin) ---------------
 
+  // --------------- P4 ---------------
+
+  describe("creación de publicaciones", () => {
+    const endpoints = [
+      { nombre: "un thread (POST /api/threads)", url: () => "/api/threads" },
+      { nombre: "un comentario (POST /api/threads/:id)", url: () => `/api/threads/${thread1Id}` },
+    ];
+
+    for (const { nombre, url } of endpoints) {
+      describe(nombre, () => {
+        test("con contenido válido responde 201 y agrega exactamente una publicación", async () => {
+          const before = await Post.countDocuments({});
+
+          await api
+            .post(url())
+            .send({ content: "Un contenido cualquiera válido" })
+            .expect(201)
+            .expect("Content-Type", /application\/json/);
+
+          const after = await Post.countDocuments({});
+          assert.strictEqual(after, before + 1);
+        });
+
+        test("sin contenido responde 400 y no agrega nada", async () => {
+          const before = await Post.countDocuments({});
+          await api.post(url()).send({}).expect(400);
+          const after = await Post.countDocuments({});
+          assert.strictEqual(after, before);
+        });
+
+        test("con contenido de 301 caracteres responde 400 y no agrega nada", async () => {
+          const before = await Post.countDocuments({});
+          await api.post(url()).send({ content: "a".repeat(301) }).expect(400);
+          const after = await Post.countDocuments({});
+          assert.strictEqual(after, before);
+        });
+
+        test("con contenido de exactamente 300 caracteres se acepta", async () => {
+          await api.post(url()).send({ content: "a".repeat(300) }).expect(201);
+        });
+
+        test("con contenido vacío responde 400", async () => {
+          await api.post(url()).send({ content: "" }).expect(400);
+        });
+
+        test("sin author, la publicación se guarda con éxito", async () => {
+          const before = await Post.countDocuments({});
+          await api.post(url()).send({ content: "contenido sin autor" }).expect(201);
+          const after = await Post.countDocuments({});
+          assert.strictEqual(after, before + 1);
+        });
+
+        test("con author prohibido responde 400 y no agrega nada", async () => {
+          const before = await Post.countDocuments({});
+          await api
+            .post(url())
+            .send({ content: "contenido válido", author: "Huevito Rey" })
+            .expect(400);
+          const after = await Post.countDocuments({});
+          assert.strictEqual(after, before);
+        });
+
+        test("con author prohibido en otra capitalización también responde 400", async () => {
+          const before = await Post.countDocuments({});
+          await api
+            .post(url())
+            .send({ content: "contenido válido", author: "HUEVITO REY" })
+            .expect(400);
+          const after = await Post.countDocuments({});
+          assert.strictEqual(after, before);
+        });
+      });
+    }
+  });
+
+  // --------------- P4 (fin) ---------------
   // Cerrar la conexión al finalizar todos los tests
   after(async () => {
     await mongoose.connection.close();
