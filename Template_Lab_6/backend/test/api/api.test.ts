@@ -263,6 +263,79 @@ describe("Pruebas de Integración", () => {
 
   // --------------- P5 (fin) ---------------
 
+  // --------------- P6 ---------------
+
+  describe("actualización de publicaciones (PUT /api/posts/:id)", () => {
+    test("con un cuerpo válido responde 200 y el cambio queda guardado", async () => {
+      const thread = await Post.findOne({ thread: null });
+      const originalLikes = thread!.likes;
+
+      const response = await api
+        .put(`/api/posts/${thread!.id}`)
+        .send({ likes: originalLikes + 1 })
+        .expect(200)
+        .expect("Content-Type", /application\/json/);
+
+      assert.strictEqual(response.body.likes, originalLikes + 1);
+
+      // Verificar que el cambio quedó guardado en la base de datos
+      const updated = await Post.findById(thread!._id);
+      assert.strictEqual(updated!.likes, originalLikes + 1);
+    });
+
+    test("con un id válido pero que no existe responde 404", async () => {
+      const nonExistentId = new mongoose.Types.ObjectId().toString();
+      await api
+        .put(`/api/posts/${nonExistentId}`)
+        .send({ likes: 10 })
+        .expect(404);
+    });
+
+    test("con contenido por sobre los 300 caracteres responde 400 y no modifica la publicación", async () => {
+      const thread = await Post.findOne({ thread: null });
+      const originalContent = thread!.content;
+
+      await api
+        .put(`/api/posts/${thread!.id}`)
+        .send({ content: "a".repeat(301) })
+        .expect(400);
+
+      // Verificar que la publicación no fue modificada
+      const notModified = await Post.findById(thread!._id);
+      assert.strictEqual(notModified!.content, originalContent);
+    });
+
+    test("con contenido vacío responde 400 y no modifica la publicación", async () => {
+      const thread = await Post.findOne({ thread: null });
+      const originalContent = thread!.content;
+
+      await api
+        .put(`/api/posts/${thread!.id}`)
+        .send({ content: "" })
+        .expect(400);
+
+      // Verificar que la publicación no fue modificada
+      const notModified = await Post.findById(thread!._id);
+      assert.strictEqual(notModified!.content, originalContent);
+    });
+
+    test("con un author prohibido responde 400 y no modifica la publicación", async () => {
+      const thread = await Post.findOne({ thread: null });
+      const originalAuthor = thread!.author;
+
+      await api
+        .put(`/api/posts/${thread!.id}`)
+        .send({ author: "Huevito Rey" })
+        .expect(400);
+
+      // Verificar que la publicación no fue modificada
+      const notModified = await Post.findById(thread!._id);
+      assert.strictEqual(notModified!.author, originalAuthor);
+    });
+  });
+
+  // --------------- P6 (fin) ---------------
+
   // Cerrar la conexión al finalizar todos los tests
   after(async () => {
     await mongoose.connection.close();

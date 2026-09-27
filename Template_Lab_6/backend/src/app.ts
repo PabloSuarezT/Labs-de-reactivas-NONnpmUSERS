@@ -118,7 +118,7 @@ app.put("/api/posts/:id", (request, response, next) => {
   const body = request.body;
   const id = request.params.id;
 
-  PostModel.findByIdAndUpdate(id, body, { new: true })
+  PostModel.findByIdAndUpdate(id, body, { new: true, runValidators: true })
     .then((updatedPost) => {
       if (updatedPost) {
         response.json(updatedPost);
