@@ -210,6 +210,59 @@ describe("Pruebas de Integración", () => {
   });
 
   // --------------- P4 (fin) ---------------
+
+  // --------------- P5 ---------------
+
+  describe("comentarios colgando (POST /api/threads/:id)", () => {
+    test("con un id de thread válido pero que no existe responde 404 y no crea el comentario", async () => {
+      const before = await Post.countDocuments({});
+      const nonExistentId = new mongoose.Types.ObjectId().toString();
+
+      await api
+        .post(`/api/threads/${nonExistentId}`)
+        .send({ content: "comentario huérfano" })
+        .expect(404);
+
+      const after = await Post.countDocuments({});
+      assert.strictEqual(after, before);
+    });
+
+    test("con un parent que no pertenece a ese thread responde 400 y no crea el comentario", async () => {
+      const parentInvalido = await Post.findOne({ thread: thread2Id });
+      const before = await Post.countDocuments({});
+
+      await api
+        .post(`/api/threads/${thread1Id}`)
+        .send({
+          content: "comentario con parent de otro thread",
+          parent: parentInvalido!.id,
+        })
+        .expect(400);
+
+      const after = await Post.countDocuments({});
+      assert.strictEqual(after, before);
+    });
+
+    test("con un parent que sí es un comentario de ese thread responde 201", async () => {
+      const parentValido = await Post.findOne({ thread: thread1Id });
+      const before = await Post.countDocuments({});
+
+      await api
+        .post(`/api/threads/${thread1Id}`)
+        .send({
+          content: "respuesta anidada válida",
+          parent: parentValido!.id,
+        })
+        .expect(201)
+        .expect("Content-Type", /application\/json/);
+
+      const after = await Post.countDocuments({});
+      assert.strictEqual(after, before + 1);
+    });
+  });
+
+  // --------------- P5 (fin) ---------------
+
   // Cerrar la conexión al finalizar todos los tests
   after(async () => {
     await mongoose.connection.close();
