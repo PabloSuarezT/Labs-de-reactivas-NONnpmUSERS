@@ -4,6 +4,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/user";
 import config from "../utils/config";
+import { withUser } from "../utils/middleware";
 
 const router = express.Router();
 
@@ -38,14 +39,21 @@ router.post("/", async (request, response) => {
   response.status(200).send({ username: user.username });
 });
 
-// TODO (P4): usuario de la sesión actual (protegido con withUser).
-router.get("/me", async (request, response) => {
-  response.status(501).json({ error: "not implemented" });
+// --- P4: usuario de la sesión actual (protegido con withUser). ---
+router.get("/me", withUser, async (request, response) => {
+  const user = await User.findById(request.userId);
+  if (!user) {
+    response.status(401).json({ error: "user not found" });
+    return;
+  }
+  response.json(user);
 });
 
-// TODO (P4): cerrar sesión.
+// --- P4: cerrar sesión. ---
 router.post("/logout", async (request, response) => {
-  response.status(501).json({ error: "not implemented" });
+  response.clearCookie("token");
+  response.status(200).json({ message: "logged out" });
 });
 
 export default router;
+
