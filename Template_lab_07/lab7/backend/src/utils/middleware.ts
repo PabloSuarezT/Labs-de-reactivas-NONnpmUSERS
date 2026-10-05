@@ -84,4 +84,38 @@ export const withUser = async (
 
 // TODO (P5): withOptionalUser
 
+export const withOptionalUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    req.userId = undefined;
+    next();
+    return;
+  }
+
+  try {
+    const decoded = jwt.verify(token, config.JWT_SECRET) as {
+      id: string;
+      csrf: string;
+    };
+
+    const csrfHeader = req.header("X-CSRF-Token");
+    if (decoded.csrf !== csrfHeader) {
+      req.userId = undefined;
+      next();
+      return;
+    }
+
+    req.userId = decoded.id;
+    next();
+  } catch {
+    req.userId = undefined;
+    next();
+  }
+};
+
 export default { requestLogger, unknownEndpoint, errorHandler };
