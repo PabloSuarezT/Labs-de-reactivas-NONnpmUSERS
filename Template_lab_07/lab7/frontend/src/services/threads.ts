@@ -1,6 +1,6 @@
 import axios from 'axios'
 import type { Post } from '../types/posts'
-
+import axiosSecure from '../utils/axiosSecure'
 const baseUrl = `/api/threads`
 
 const getAll = () => {
@@ -22,7 +22,7 @@ interface ThreadCreateData {
   author?: string
 }
 const create = (data: ThreadCreateData) => {
-  return axios.post<Post>(`${baseUrl}`, data).then(request => request.data)
+  return axiosSecure.post<Post>(`${baseUrl}`, data).then(request => request.data)
 }
 
 interface CommentCreateData {
@@ -31,7 +31,7 @@ interface CommentCreateData {
   parent?: number
 }
 const createComment = (data: CommentCreateData, threadId: string) => {
-  return axios.post<Post>(`${baseUrl}/${threadId}`, data).then(request => request.data)
+  return axiosSecure.post<Post>(`${baseUrl}/${threadId}`, data).then(request => request.data)
 }
 
 const update = (id: number, newObject: Post) => {
