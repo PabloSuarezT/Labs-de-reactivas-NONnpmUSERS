@@ -105,16 +105,18 @@ export const withOptionalUser = async (
 
     const csrfHeader = req.header("X-CSRF-Token");
     if (decoded.csrf !== csrfHeader) {
-      req.userId = undefined;
-      next();
+      res.status(401).json({ error: "invalid csrf token" });
+      // req.userId = undefined;
+      // next();
       return;
     }
 
     req.userId = decoded.id;
     next();
   } catch {
-    req.userId = undefined;
-    next();
+    res.status(401).json({ error: "invalid token" });
+    // req.userId = undefined;
+    // next();
   }
 };
 
