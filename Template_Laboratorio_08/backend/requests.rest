@@ -1,0 +1,39 @@
+### Crear un usuario
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "root",
+  "email": "root@example.com",
+  "password": "sekret"
+}
+
+### Listar usuarios
+GET http://localhost:3001/api/users
+
+### Login (REST Client guarda la cookie `token` para las peticiones siguientes)
+# @name login
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "username": "root",
+  "password": "sekret"
+}
+
+### Usuario de la sesión actual
+GET http://localhost:3001/api/login/me
+X-CSRF-Token: {{login.response.headers.X-CSRF-Token}}
+
+### Crear un thread (con sesión si hay cookie, anónimo si no)
+POST http://localhost:3001/api/threads
+Content-Type: application/json
+X-CSRF-Token: {{login.response.headers.X-CSRF-Token}}
+
+{
+  "content": "Hola desde REST Client",
+  "author": "Otro nombre"
+}
+
+### Cerrar sesión
+POST http://localhost:3001/api/login/logout
