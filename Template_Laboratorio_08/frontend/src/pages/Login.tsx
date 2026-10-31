@@ -41,9 +41,8 @@ const Login = ({ setUser }: LoginProps) => {
           <Typography component="h1" variant="h4" sx={{ mb: 3 }}>
             Sign in to your account
           </Typography>
-
           {error && (
-            <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
+            <Alert className="error" severity="error" sx={{ width: '100%', mb: 2 }}>  
               {error}
             </Alert>
           )}
@@ -60,6 +59,7 @@ const Login = ({ setUser }: LoginProps) => {
               autoFocus
               value={username}
               onChange={e => setUsername(e.target.value)}
+              slotProps={{ htmlInput: { 'data-testid': 'username' } }} //Agregado p3
             />
             <TextField
               margin="normal"
@@ -72,6 +72,7 @@ const Login = ({ setUser }: LoginProps) => {
               autoComplete="current-password"
               value={password}
               onChange={e => setPassword(e.target.value)}
+              slotProps={{ htmlInput: { 'data-testid': 'password' } }} //Agregado p3
             />
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               Sign In

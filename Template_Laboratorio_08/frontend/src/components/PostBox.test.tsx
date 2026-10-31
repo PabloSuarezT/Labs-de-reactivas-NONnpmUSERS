@@ -1,16 +1,20 @@
-import { render, screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
-import PostBox from './PostBox'
-import type { Post } from '../types/posts'
-import threads from '../services/threads'
+import { render, screen, waitFor } from '@testing-library/react' /* p1 */
+import userEvent from '@testing-library/user-event' /* p2 */
+import { MemoryRouter } from 'react-router-dom' /* p1 */
+import PostBox from './PostBox' /* p1 */
+import type { Post } from '../types/posts' /* p1 */
+import threads from '../services/threads' /* p2 */
 
+/* inicio cambios p2 */
 vi.mock('../services/threads', () => ({
   default: {
     update: vi.fn(),
   },
 }))
+/* fin cambios p2 */
 
+
+/* inicio cambios p1 */ 
 describe('<PostBox /> - P1', () => {
   test('renderiza el contenido del comentario y el nombre del autor', () => {
     const comment: Post = {
@@ -80,7 +84,10 @@ describe('<PostBox /> - P1', () => {
     expect(screen.getByText(/>>42/)).toBeDefined()
   })
 })
+/* fin cambios p1 */
 
+
+/* inicio cambios p2 */
 describe('<PostBox /> - P2', () => {
   const comment: Post = {
     id: 1,
@@ -116,3 +123,4 @@ describe('<PostBox /> - P2', () => {
     await waitFor(() => expect(setToast).toHaveBeenCalledTimes(2))
   })
 })
+/* fin cambios p2 */

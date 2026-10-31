@@ -7,6 +7,7 @@ import middleware from "./utils/middleware";
 import postsRouter from "./controllers/posts";
 import usersRouter from "./controllers/users";
 import loginRouter from "./controllers/login";
+import testingRouter from "./controllers/testing"; /* p3: Se agrega el router de testing e2e */
 
 const app = express();
 
@@ -25,6 +26,12 @@ app.use(express.static("dist"));
 app.use(express.json());
 app.use(cookieParser());
 app.use(middleware.requestLogger);
+
+/* p3: agregamos ruta de testing */
+if (config.NODE_ENV === "development" || config.NODE_ENV === "test") {
+  app.use("/api/testing", testingRouter);
+}
+/* fin cambios p3 */
 
 app.use("/api", postsRouter);
 app.use("/api/users", usersRouter);
