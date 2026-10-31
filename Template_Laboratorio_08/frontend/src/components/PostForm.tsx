@@ -46,6 +46,7 @@ function PostForm({ parentId, onSubmit, onCancel }: PostFormProps) {
           size="small"
           value={author}
           onChange={e => setAuthor(e.target.value)}
+          inputProps={{ 'data-testid': 'author' }}
         />
         <TextField
           label="Comment"
@@ -59,6 +60,7 @@ function PostForm({ parentId, onSubmit, onCancel }: PostFormProps) {
           }}
           error={!!error}
           helperText={error}
+          inputProps={{ 'data-testid': 'content' }}
         />
         <Stack direction="row" spacing={1} justifyContent="flex-end">
           {onCancel && (

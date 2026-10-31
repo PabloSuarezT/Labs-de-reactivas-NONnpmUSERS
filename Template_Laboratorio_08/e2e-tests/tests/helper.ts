@@ -1,5 +1,3 @@
-/* Temp. Code 4 .spec.ts file to stop getting an error. */
-
 import type { Page } from "@playwright/test";
 
 const backendUrl = 'http://localhost:3001';
@@ -13,11 +11,20 @@ const LogIn = async (page: Page, username: string, password: string) => {
 
 const ResetDB = async (page: Page) => {
   const response = await page.request.post(
-      `${backendUrl}/api/testing/reset`,
-    );
+    `${backendUrl}/api/testing/reset`,
+  );
   if (!response.ok()) {
     throw new Error(`No se pudo reiniciar la DB: ${response.status()} ${response.statusText()}`);
   }
 };
 
-export { LogIn, ResetDB };
+// --- P4: Función helper para publicar un thread ---
+const createThread = async (page: Page, content: string, author?: string) => {
+  if (author) {
+    await page.getByTestId('author').fill(author);
+  }
+  await page.getByTestId('content').fill(content);
+  await page.getByRole('button', { name: 'Post' }).click();
+};
+
+export { LogIn, ResetDB, createThread };

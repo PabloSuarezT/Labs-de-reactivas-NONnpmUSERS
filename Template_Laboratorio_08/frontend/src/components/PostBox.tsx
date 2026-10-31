@@ -54,6 +54,7 @@ const PostBox = ({ post, action, setToast, onReply }: PostBoxProps) => {
 
   return (
     <Card
+      className="post"
       sx={{
         backgroundColor: isThread ? '#f0e0d6' : '#f7ede6',
         border: '1px solid #d9bfb0',
