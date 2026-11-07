@@ -1,0 +1,94 @@
+/* Estilos del tablero y del modal. Las clases ya están listas: basta usarlas
+   desde los componentes.
+
+   .toolbar          fila con el formulario de tareas y el filtro
+   .toolbar button[aria-pressed="true"]  botón de filtro seleccionado
+   .board            tablero de tres columnas
+   .column           una columna del tablero
+   .column h2        encabezado de la columna
+   .card             tarjeta de una tarea, clickeable
+   .card-title       título de la tarea
+   .card-meta        fecha y categoría de la tarea
+   .modal-overlay    fondo oscuro que cubre la página
+   .modal            contenido del modal */
+
+body {
+  margin: 0;
+  padding: 1rem;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+  color: #1a1a1a;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.toolbar button[aria-pressed="true"] {
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #fff;
+  font-weight: 600;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.column h2 {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin: 0 0 0.75rem;
+}
+
+.card {
+  border: 1px solid #d4d4d4;
+  border-radius: 4px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: #8a8a8a;
+}
+
+.card-title {
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.card-meta {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 45%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem 2rem;
+  max-width: 32rem;
+  width: calc(100% - 2rem);
+  box-shadow: 0 4px 24px rgb(0 0 0 / 25%);
+}
+
+.modal h2 {
+  margin-top: 0;
+}
